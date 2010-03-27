@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<project name="ASDocsTest" default="compile" basedir="../">
+
+	<!-- import our build properties file -->
+	<property file="${basedir}/build/build.properties" />
+
+	<taskdef resource="flexTasks.tasks" classpath="${FLEX_HOME}${flex.tasks}" />
+
+	<target name="compile" depends="flashbum-site, bin-debug, local-deploy, local_open">
+
+	</target>
+
+	<target name="bin-debug">
+		<echo>
+			Moving site over to bin-debug...
+		</echo>
+		<sync todir="${basedir}/bin">
+			<fileset dir="${basedir}/bin-template" />
+		</sync>
+
+		<move file="${basedir}/bin/index.template.html" tofile="${basedir}/bin/index.html" />
+
+		<replace file="${basedir}/${outputfolder}/index.html" propertyFile="${basedir}/build/html.properties">
+			<replacefilter token="@width@" property="width" />
+			<replacefilter token="@height@" property="height" />
+			<replacefilter token="@bgcolor@" property="bgcolor" />
+			<replacefilter token="@application@" property="application" />
+			<replacefilter token="@swf@" property="swf" />
+			<replacefilter token="@title@" property="title" />
+			<replacefilter token="@version_major@" property="version_major" />
+			<replacefilter token="@version_minor@" property="version_minor" />
+			<replacefilter token="@version_minor@" property="version_minor" />
+			<replacefilter token="@version_revision@" property="version_revision" />
+		</replace>
+	</target>
+
+	<target name="local-deploy">
+		<echo>
+			Deploying Site...
+		</echo>
+		<sync todir="${local.deploy}">
+			<fileset dir="${basedir}/${outputfolder}" />
+		</sync>
+	</target>
+
+	<target name="flashbum-site">
+		<mxmlc id="swf.compile" file="${basedir}/src/${doc.class}" target-player="10.0.0" output="${basedir}/bin-template/swfs/${output.filename}" incremental="true" debug="true">
+			<library-path dir="${basedir}/lib/swcs" append="true">
+				<include name="FLARToolKit.swc" />
+				<include name="Papervision3D.swc" />
+			</library-path>
+			<default-size width="1024" height="786" />
+			<default-frame-rate>60</default-frame-rate>
+		</mxmlc>
+	</target>
+
+	<target name="local_open">
+		<fdt.startDebugger projectname="${project.name}" />
+		<exec executable="open">
+			<arg line="-a ${browser} ${local.path}" />
+		</exec>
+	</target>
+
+	<target name="asdoc">
+		<asdoc output="${basedir}/docs" window-title="${project.name}">
+			<source-path path-element="${basedir}/src" />
+			<doc-sources path-element="${basedir}/src" />
+			<library-path dir="${basedir}/lib/swcs" append="false">
+				<include name="FLARToolKit.swc" />
+				<include name="Papervision3D.swc" />
+			</library-path>
+		</asdoc>
+
+		<echo>${project.name} Docs created</echo>
+	</target>
+</project>
+
+
