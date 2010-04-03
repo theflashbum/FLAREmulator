@@ -31,6 +31,8 @@
  
  package
 {
+     import flash.display.StageDisplayState;
+     import flash.events.KeyboardEvent;
      import flash.events.MouseEvent;
 
      import flash.text.TextField;
@@ -71,7 +73,7 @@
 	 */	
 	public class FLAREmulator extends Sprite
 	{
-        protected static const defaultText:String = "Click to change to debug mode - Debug is currently to ";
+        protected static const defaultText:String = "Press F Key for full Screen \nSpacebar toggles debug mode \nDebug is currently to ";
 		protected var scene:Scene3D;
 		protected var camera:Camera3D;
 		protected var viewport:Viewport3D;
@@ -86,7 +88,6 @@
 		protected var webcam:Camera;
 		protected var video:Video;
         protected var label:TextField;
-
 
 		/**
 		 * Main Constructor for the class.
@@ -108,7 +109,8 @@
 			stage.quality = StageQuality.HIGH;
 			stage.align = StageAlign.TOP_LEFT; 
 			stage.scaleMode = StageScaleMode.NO_SCALE;
-			stage.addEventListener( Event.RESIZE, onStageResize ); 
+			stage.addEventListener( Event.RESIZE, onStageResize );
+            stage.addEventListener(Event.FULLSCREEN, onStageResize);
 		}
 
 		protected function onStageResize(event:Event = null):void
@@ -117,6 +119,8 @@
 		 		resize( capturedSrc, stage.stageWidth, stage.stageHeight );
 			if(viewport)
 		 		resize( viewport, stage.stageWidth, stage.stageHeight );
+            if(label)
+                label.x = stage.stageWidth - label.width;
 		}
 
 		/**
@@ -218,7 +222,7 @@
 			setupPapervision( );
 			addEventListener( Event.ENTER_FRAME, renderViewport );
             createDebugDisplay( );
-			stage.addEventListener( MouseEvent.CLICK, onClick );
+            addKeyboardShortcuts();
 		}
 
 		/**
@@ -409,11 +413,53 @@
          * @param event
          *
          */
-        protected function onClick(event:MouseEvent):void
+        protected function onToggleDebug():void
         {
             switchSource( );
             label.text = defaultText + debug;
         }
+
+        protected function addKeyboardShortcuts():void
+        {
+            stage.addEventListener(KeyboardEvent.KEY_DOWN, keyDownHandler);
+        }
+
+
+        protected function keyDownHandler(event:KeyboardEvent):void
+        {
+            switch (event.keyCode)
+            {
+                case 32:
+                    onToggleDebug();
+                    break;
+                
+                case ( 70 ):
+                    goFullScreen();
+                    break;
+            }
+
+            //For debug right now
+            trace("keyDownHandler: " + event.keyCode);
+        }
+
+        protected function goFullScreen():void
+        {
+            if (stage.displayState == StageDisplayState.NORMAL)
+            {
+                stage.displayState = StageDisplayState.FULL_SCREEN;
+            }
+            else
+            {
+                stage.displayState = StageDisplayState.NORMAL;
+            }
+            
+        }
+
+        protected function _handleClick(event:MouseEvent):void
+        {
+            goFullScreen();
+        }
+
         
 	}
 }

@@ -21,7 +21,8 @@
         </style>
     <script type="text/javascript" src="js/swfobject.js"></script>
     <script type="text/javascript">
-    swfobject.embedSWF("swfs/@example@.swf", "flashContent", "@width@", "@height@", "@version_major@.@version_minor@.@version_revision@", "#ff0000");
+        var params = {allowFullScreen: "true"};
+        swfobject.embedSWF("swfs/@example@.swf", "flashContent", "@width@", "@height@", "10.0.0", "expressInstall.swf", null, params);
     </script>
 
   </head>

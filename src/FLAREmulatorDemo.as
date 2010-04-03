@@ -31,19 +31,11 @@
  
 package
 {
-	import com.flashartofwar.pv3d.componets.CPodContainer;
+    import com.flashartofwar.pv3d.componets.CPodContainer;
 
-	import flash.events.MouseEvent;
-	import flash.text.TextField;
-	import flash.text.TextFormat;
-
-	public class FLAREmulatorDemo extends FLAREmulator
+    public class FLAREmulatorDemo extends FLAREmulator
 	{
 
-		
-		/**
-		 * 
-		 */		
 		public function FLAREmulatorDemo()
 		{
 			super( );
