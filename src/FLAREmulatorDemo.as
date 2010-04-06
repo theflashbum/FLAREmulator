@@ -43,8 +43,8 @@ package
 
         override protected function create3dObjects():void
         {
-            var cpod:CPodContainer = new CPodContainer();
-            cpod.attachTo(baseNode) ;
+            var cPod:CPodContainer = new CPodContainer();
+            cPod.attachTo(baseNode);
         }
 
 	}
