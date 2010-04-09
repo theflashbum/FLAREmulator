@@ -1,21 +1,33 @@
-Hello,
+There is a lot of buzz around Augmented Reality in Flash and it looks like everywhere 
+you turn another person is writing a tutorial about it. I decided to make a tool 
+to prototype my Flash AR ideas. The FLAREmulator is a set of classes that encapsulate 
+the setup of the FLARToolKit as well as offering a debug mode for you to test your 
+markers with or without a webcam. Getting started with Flash Augmented Reality may 
+seem daunting but this library is a great way to jump in and see immediate results 
+without the fuss of setting up the FlarToolKit or Papervision.
 
-Welcome to my Flash TDD Project Template. I will be adding instructions here 
-on how to use this file but for now just copy build.template.properties to 
-build.properties, point FLEX_HOME to where you keep your Flex 4.0 SDK lives on 
-your computer, run the build file then sit back and enjoy the show.
+Getting Started
 
-What is going on?
+1) Download the source code from GitHub http://github.com/theflashbum/FLAREmulator
 
-This build will run the unit tests.
+2) Link your project to the FLARToolKit.swc and Papervision.swc in the build/libs 
+directory.
 
-If the test fails it will attempt to open up the report in the web browser you
-specify in the build.properties file (may only work on the mac right now).
+3) Create a new class and extend FLAREmulator.as
 
-If the test passes you will not see the report. A bin folder will be
-created, based on the files in build/bin-resrouces (where you keep external files
-for your project) and build/html-template (the html template file in it's property
-file).
+4) Override protected function create3dObjects() and add you PV3d container 
+to baseNode:
 
-Once the bin folder is setup, the browser will attempt to launch the index.html
-file and let you preview your swf.
+/**
+ * This default function is where 3d Objects should be added to PV3D's
+ * scenes. 
+ * 
+ */			
+protected function create3dObjects():void
+{
+	var plane:Plane = new Plane( new WireframeMaterial( 0xff0000 ), 80, 80 );
+	plane.rotationX = 180;
+	baseNode.addChild( plane );
+}
+
+5) Compile and begin testing!

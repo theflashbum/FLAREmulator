@@ -50,15 +50,17 @@
 	public class CPodContainer
 	{
 
-		protected var cube:Cube;
+		protected var cube : Cube;
+		private var baseURL : String;
 
 		/**
 		 * Main constructor. Calls init and begins creating the cPod 3d 
 		 * Object.
 		 * 
 		 */		
-		public function CPodContainer()
+		public function CPodContainer(baseURL:String = "")
 		{
+			this.baseURL = baseURL;
 			init( );
 		}
 
@@ -106,12 +108,12 @@
 		 */		
 		protected function createSkins():MaterialsList
 		{
-			var frontBFM:BitmapFileMaterial = new BitmapFileMaterial( "images/skins/cpod-front.jpg" );
-			var backBFM:BitmapFileMaterial = new BitmapFileMaterial( "images/skins/cpod-back.jpg" );
-			var rightBFM:BitmapFileMaterial = new BitmapFileMaterial( "images/skins/cpod-left.jpg" );
-			var leftBFM:BitmapFileMaterial = new BitmapFileMaterial( "images/skins/cpod-right.jpg" );
-			var topBFM:BitmapFileMaterial = new BitmapFileMaterial( "images/skins/cpod-top.jpg" );
-			var bottomBFM:BitmapFileMaterial = new BitmapFileMaterial( "images/skins/cpod-bottom.jpg" );
+			var frontBFM:BitmapFileMaterial = new BitmapFileMaterial( baseURL + "images/skins/cpod-front.jpg" );
+			var backBFM:BitmapFileMaterial = new BitmapFileMaterial( baseURL + "images/skins/cpod-back.jpg" );
+			var rightBFM:BitmapFileMaterial = new BitmapFileMaterial( baseURL + "images/skins/cpod-left.jpg" );
+			var leftBFM:BitmapFileMaterial = new BitmapFileMaterial( baseURL + "images/skins/cpod-right.jpg" );
+			var topBFM:BitmapFileMaterial = new BitmapFileMaterial( baseURL + "images/skins/cpod-top.jpg" );
+			var bottomBFM:BitmapFileMaterial = new BitmapFileMaterial( baseURL + "images/skins/cpod-bottom.jpg" );
    			
 			return new MaterialsList( {front: frontBFM, back: backBFM, right: rightBFM, left: leftBFM, top: topBFM, bottom: bottomBFM} );
 		}

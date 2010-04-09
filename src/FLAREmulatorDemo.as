@@ -29,23 +29,20 @@
  *
  */
  
-package
-{
-    import com.flashartofwar.pv3d.componets.CPodContainer;
+package {
+	import com.flashartofwar.pv3d.componets.CPodContainer;
 
-    public class FLAREmulatorDemo extends FLAREmulator
+	public class FLAREmulatorDemo extends FLAREmulator
 	{
 
-		public function FLAREmulatorDemo()
-		{
+		public function FLAREmulatorDemo() {
 			super( );
 		}
 
-        override protected function create3dObjects():void
-        {
-            var cPod:CPodContainer = new CPodContainer();
-            cPod.attachTo(baseNode);
-        }
-
+		
+		override protected function create3dObjects() : void {
+			var cPod:CPodContainer = new CPodContainer(baseURL);
+			cPod.attachTo(baseNode);
+		}
 	}
 }

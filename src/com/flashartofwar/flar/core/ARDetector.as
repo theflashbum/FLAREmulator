@@ -29,9 +29,7 @@
  *
  */
  
-package com.flashartofwar.flar.core
-{
-    import com.flashartofwar.flar.*;
+package com.flashartofwar.flar.core {
 	import org.libspark.flartoolkit.core.FLARCode;
 	import org.libspark.flartoolkit.core.param.FLARParam;
 	import org.libspark.flartoolkit.core.raster.rgb.FLARRgbRaster_BitmapData;

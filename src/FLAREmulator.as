@@ -88,7 +88,7 @@
 		protected var webcam:Camera;
 		protected var video:Video;
         protected var label:TextField;
-
+		protected var baseURL:String = "";
 		/**
 		 * Main Constructor for the class.
 		 * 
@@ -186,7 +186,7 @@
 		{
 			arDetector = new ARDetector( );
 			arDetector.addEventListener( Event.COMPLETE, onActivate );
-			arDetector.setup( 'data/camera_para.dat', 'data/flarlogo.pat' );
+			arDetector.setup( baseURL + 'data/camera_para.dat', baseURL + '/data/flarlogo.pat' );
 		}
 
 		/**
@@ -194,20 +194,7 @@
 		 */        
 		protected function onActivate(event:Event):void
 		{
-			createCaptureSource( );
 			init( );
-		}
-
-		/**
-		 * Creates a Bitmap for us to scan for valid markers.
-		 * 
-		 */		
-		protected function createCaptureSource():void
-		{
-			capturedSrc = new Bitmap( new BitmapData( arDetector.width, arDetector.height, false, 0 ), PixelSnapping.AUTO, true );
-			arDetector.src = capturedSrc.bitmapData;
-			addChild( capturedSrc );
-			onStageResize( );
 		}
 
 		/**
@@ -224,7 +211,41 @@
             createDebugDisplay( );
             addKeyboardShortcuts();
 		}
-
+		
+		/**
+		 * Creates a Bitmap for us to scan for valid markers.
+		 * 
+		 */		
+		protected function createCaptureSource():void
+		{
+			capturedSrc = new Bitmap( new BitmapData( arDetector.width, arDetector.height, false, 0 ), PixelSnapping.AUTO, true );
+			arDetector.src = capturedSrc.bitmapData;
+			addChild( capturedSrc );
+			onStageResize( );
+		}
+		
+		/**
+		 * Creates a camera or emulator to use as the src for the ARDetector
+		 * to analyze for markers.
+		 * 
+		 */		
+		protected function createCamera():void
+		{
+			if(debug || ! Camera.getCamera( ))
+			{
+				createEmulatorCard( );	
+			}
+			else
+			{
+				webcam = Camera.getCamera( );
+				webcam.setMode( arDetector.width, arDetector.height, 30 );
+				video = new Video( arDetector.width, arDetector.height );
+				video.attachCamera( webcam );
+		  		
+				trace( "Camera" + Camera.names );
+			}
+		}
+		
 		/**
 		 * Sets up and configures Papervision. This function can be overridden
 		 * to accommodate any custom set ups you may need for your project.
@@ -261,28 +282,23 @@
 			plane.rotationX = 180;
 			baseNode.addChild( plane );
 		}
+		
+        /**
+         * Sets up a display to let us know what mode we are in.
+         *
+         */
+        protected function createDebugDisplay():void
+        {
+            label = new TextField( );
+            label.defaultTextFormat = new TextFormat( "Arial", 12, 0x000000, true );
+            label.autoSize = "right";
+            label.selectable = false;
+            label.background = true;
+            label.text = defaultText + debug;
 
-		/**
-		 * Creates a camera or emulator to use as the src for the ARDetector
-		 * to analyze for markers.
-		 * 
-		 */		
-		protected function createCamera():void
-		{
-			if(debug || ! Camera.getCamera( ))
-			{
-				createEmulatorCard( );	
-			}
-			else
-			{
-				webcam = Camera.getCamera( );
-				webcam.setMode( arDetector.width, arDetector.height, 30 );
-				video = new Video( arDetector.width, arDetector.height );
-				video.attachCamera( webcam );
-		  		
-				trace( "Camera" + Camera.names );
-			}
-		}
+            label.x = stage.stageWidth - label.width;
+            addChild( label );
+        }
 
 		/**
 		 * Creates the emulator card to use in debug mode.
@@ -290,7 +306,7 @@
 		 */
 		protected function createEmulatorCard():void
 		{
-			cardEmulator = new CardEmulator( "images/flarlogo.gif" );
+			cardEmulator = new CardEmulator( baseURL + "/images/flarlogo.gif" );
 			addChild( cardEmulator );
 		}
 
@@ -391,22 +407,6 @@
 		}
 
 
-        /**
-         * Sets up a display to let us know what mode we are in.
-         *
-         */
-        protected function createDebugDisplay():void
-        {
-            label = new TextField( );
-            label.defaultTextFormat = new TextFormat( "Arial", 12, 0x000000, true );
-            label.autoSize = "right";
-            label.selectable = false;
-            label.background = true;
-            label.text = defaultText + debug;
-
-            label.x = stage.stageWidth - label.width;
-            addChild( label );
-        }
 
         /**
          * Class switch source when a click event is recieved.
@@ -437,9 +437,7 @@
                     goFullScreen();
                     break;
             }
-
-            //For debug right now
-            trace("keyDownHandler: " + event.keyCode);
+            
         }
 
         protected function goFullScreen():void
